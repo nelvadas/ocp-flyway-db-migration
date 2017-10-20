@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: beosbank.db.update
+spec:
+  template:
+     metadata:
+       name: beosbank.db.update
+     spec:
+      containers:
+       - name: dbupgrade-container
+         image: jbossdevguidebook/flyway
+         env:
+         - name: DB_USER
+           value: "postgres"
+         - name: DB_PASSWORD
+           value: "postgres"
+         - name: DB_URL
+           value: "jdbc:postgresql://beosbank-posgres-db-europa/beosbank-europa"
+      volumeMounts:
+      - name: sql-config-volume
+        mountPath: /opt/flyway/sql
+      volumes:
+       - name: sql-config-volume
+         configMap:
+         name: sql-configmap 
+      restartPolicy: Never
+         
+          
