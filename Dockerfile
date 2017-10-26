@@ -22,10 +22,10 @@ RUN apk add --update \
 #Download and flyway
 RUN wget --no-check-certificate  $FLYWAY_PKGS &&\
    mkdir -p $FLYWAY_HOME && \
-   tar -xzf flyway-commandline-4.2.0.tar.gz -C $FLYWAY_HOME  --strip-components=1 &&\
-   chmod 700 $FLYWAY_HOME/flyway && \
-   ln -s $FLYWAY_HOME/sql /opt/flyway/sql
+   mkdir -p /var/flyway/data  && \
+   tar -xzf flyway-commandline-4.2.0.tar.gz -C $FLYWAY_HOME  --strip-components=1
 
-VOLUME /opt/flyway/sql
+VOLUME /var/flyway/data
 
-ENTRYPOINT $FLYWAY_HOME/flyway  baseline migrate info  -user=${DB_USER} -password=${DB_PASSWORD} -url=${DB_URL}
+ENTRYPOINT  cp -f /var/flyway/data/*.sql  $FLYWAY_HOME/sql/ && \
+            $FLYWAY_HOME/flyway  baseline migrate info  -user=${DB_USER} -password=${DB_PASSWORD} -url=${DB_URL}

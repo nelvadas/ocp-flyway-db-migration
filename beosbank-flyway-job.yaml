@@ -9,10 +9,10 @@ spec:
     spec:
       containers:
         - name: db-updater
-          image: jbossdevguidebook/flyway:latest
+          image: jbossdevguidebook/flyway:v1.0.4
           volumeMounts:
             - name: sql-configmap-volume
-              mountPath: /opt/flyway/sql
+              mountPath: /var/flyway/data/
           env:
           - name: DB_USER
             value: root
