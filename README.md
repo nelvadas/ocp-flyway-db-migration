@@ -35,6 +35,7 @@ Create the postgres DB application in the ocp-flyway-db-migration project
 The application starts and you have a postgres pod
 
 ![Beosbank Database pod](https://github.com/nelvadas/ocp-flyway-db-migration/blob/master/beosbank-db-pod.png)
+
 Check the database content
 
 
