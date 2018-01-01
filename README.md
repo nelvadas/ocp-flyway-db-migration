@@ -86,7 +86,7 @@ beosbank-europa=# \d
 
 * display the content of the eu_customer table
 
-```
+<pre><code>
 beosbank-europa=# select * from eu_customer;
  id |   city    | country  |      street       |  zip   | birthdate  | firstname  | lastname
 ----+-----------+----------+-------------------+--------+------------+------------+-----------
@@ -97,13 +97,13 @@ beosbank-europa=# select * from eu_customer;
   5 | Douala    | Cameroon | bld Liberte       | 1020   | 1996-04-21 | Ghislain   | Kamga
   6 | Yaounde   | Cameroon | Hypodrome         | 1400   | 1983-11-18 | Nathan     | Brice
   7 | Bruxelles | Belgium  | rue Van Gogh      | 1000   | 1980-09-06 | Yohan      | Pieter
-  8 | London    | UK       | street Lavoisier  | 208    | 1990-01-01 | John       | Doe
+ <b> 8 | London    | UK       | street Lavoisier  | 208    | 1990-01-01 | John       | Doe</b>
   9 | Bamako    | Mali     | Rue Modibo Keita  | 30     | 1979-05-17 | Mohamed    | Diallo
  10 | Cracovie  | Pologne  | Avenue Vienne     | 434    | 1983-05-17 | Souleymann | Njifenjou
  11 | Chennai   | India    | Gandhi street     | 600001 | 1990-02-13 | Anusha     | Mandalapu
  12 | Sao Polo  | Brasil   | samba bld         | 69400  | 1994-02-13 | Adriana    | Pinto
 (12 rows)
-```
+</code></pre>
 
 
 
