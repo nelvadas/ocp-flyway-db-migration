@@ -1,5 +1,8 @@
 # Flyway Database Migraiton in Openshift Demo
 
+## Introduction
+
+## Starting the Database
 Connect on minishift cluster
 ``` oc login -u developer -p developer ``
 
@@ -15,7 +18,7 @@ Connect as admin rant the anyuid scc to the default service acccount in the ocp-
 
 Create the postgres DB application in the ocp-flyway-db-migration project
 ```
- oc new-app jbossdevguidebook/beosbank_posgres_db_europa:latest --name=beosbank-postgres-db-europa
+ oc new-app --docker-image=jbossdevguidebook/beosbank_posgres_db_europa:latest --name=beosbank-postgres-db-europa
 
 --> Found Docker image dafaf18 (7 months old) from Docker Hub for "jbossdevguidebook/beosbank_posgres_db_europa:latest"
     * An image stream will be created as "beosbank-postgres-db-europa:latest" that will track this image
@@ -112,4 +115,101 @@ beosbank-europa=# select * from eu_customer;
 ```cd ocp-flyway-db-migration```
 
 ``` oc create  cm sql-configmap --from-file=./sql```
+
+
+## Containerizing Flyway SQL updates 
+
+```
+$docker build -t --no-cache  jbossdevguidebook/flyway:v1.0.4-rhdblog .
+
+...
+
+2018-01-07 13:48:43 (298 KB/s) - 'flyway-commandline-4.2.0.tar.gz' saved [13583481/13583481]
+
+ ---> 095befbd2450
+Removing intermediate container 8496d11bf4ae
+Step 8/9 : VOLUME /var/flyway/data
+ ---> Running in d0e012ece342
+ ---> 4b81dfff398b
+Removing intermediate container d0e012ece342
+Step 9/9 : ENTRYPOINT cp -f /var/flyway/data/\*.sql  $FLYWAY_HOME/sql/ &&             $FLYWAY_HOME/flyway  baseline migrate info  -user=${DB_USER} -password=${DB_PASSWORD} -url=${DB_URL}
+ ---> Running in ff2431eb1c26
+ ---> 0a3721ff4863
+Removing intermediate container ff2431eb1c26
+Successfully built 0a3721ff4863
+Successfully tagged jbossdevguidebook/flyway:v1.0.4-rhdblog
+
+```
+
+## Kubernetes in action
+
+Move to the sql folder and create a 
+
+```$ cd ocp-flyway-db-migration/sql 
+   $ ls -rtl
+total 32
+-rw-r--r--  1 enonowog  staff  47 Oct 20 18:48 V2.3__UpdateZip.sql
+-rw-r--r--  1 enonowog  staff  63 Oct 20 18:48 V2.2__UpdateCountry2.sql
+-rw-r--r--  1 enonowog  staff  58 Jan  7 15:36 V1.1__UpdateCountry.sql
+-rw-r--r--  1 enonowog  staff  84 Jan  7 15:42 V3.0__UpdateStreet.sql
+```
+Theses file describe 04 flyways modifications to be applied on the database from V1.1, V2.2, v2.3 to V3.0
+
+```
+$ cd ocp-flyway-db-migration/sql
+$oc create cm sql-configmap --from-file=.
+configmap "sql-configmap" created
+```
+
+
+Create a Job to update the database
+```
+$ oc create -f https://raw.githubusercontent.com/nelvadas/ocp-flyway-db-migration/master/beosbank-flyway-job.yaml 
+```
+
+Check the Jobs
+```
+$ oc get jobs
+NAME                     DESIRED   SUCCESSFUL   AGE
+beosbank-dbupdater-job   1         1            2d
+```
+
+Check the pods
+
+```
+$ oc get pods
+NAME                                 READY     STATUS      RESTARTS   AGE
+beosbank-dbupdater-job-wzk9q         0/1       Completed   0          2d
+beosbank-posgres-db-europa-1-p16bx   1/1       Running     2          6d
+```
+
+The  job instance completed successfully 
+
+```
+
+$ oc logs beosbank-dbupdater-job-wzk9q
+Flyway 4.2.0 by Boxfuse
+Database: jdbc:postgresql://beosbank-posgres-db-europa/beosbank-europa (PostgreSQL 9.6)
+Creating Metadata table: "public"."schema_version"
+Successfully baselined schema with version: 1
+Successfully validated 5 migrations (execution time 00:00.014s)
+Current version of schema "public": 1
+Migrating schema "public" to version 1.1 - UpdateCountry
+Migrating schema "public" to version 2.2 - UpdateCountry2
+Migrating schema "public" to version 2.3 - UpdateZip
+Migrating schema "public" to version 3.0 - UpdateStreet
+Successfully applied 4 migrations to schema "public" (execution time 00:00.046s).
++---------+-----------------------+---------------------+---------+
+| Version | Description           | Installed on        | State   |
++---------+-----------------------+---------------------+---------+
+| 1       | << Flyway Baseline >> | 2018-01-05 04:35:16 | Baselin |
+| 1.1     | UpdateCountry         | 2018-01-05 04:35:16 | Success |
+| 2.2     | UpdateCountry2        | 2018-01-05 04:35:16 | Success |
+| 2.3     | UpdateZip             | 2018-01-05 04:35:16 | Success |
+| 3.0     | UpdateStreet          | 2018-01-05 04:35:16 | Success |
++---------+-----------------------+---------------------+---------+
+```
+
+The database have been updated accordingly
+
 

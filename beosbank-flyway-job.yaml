@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: db-updater
-          image: jbossdevguidebook/flyway:v1.0.4
+          image: jbossdevguidebook/flyway:v1.0.4-rhdblog
           volumeMounts:
             - name: sql-configmap-volume
               mountPath: /var/flyway/data/

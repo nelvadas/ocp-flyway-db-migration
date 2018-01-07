@@ -1,1 +1,1 @@
-UPDATE eu_customer SET street ='50 Avenue du Professeur André Lemierre' WHERE id=12;
+UPDATE eu_customer SET street ='200 Fowler Avenue', city='Farnborough'  WHERE id=8;

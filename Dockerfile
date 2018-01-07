@@ -23,7 +23,7 @@ RUN apk add --update \
 RUN wget --no-check-certificate  $FLYWAY_PKGS &&\
    mkdir -p $FLYWAY_HOME && \
    mkdir -p /var/flyway/data  && \
-   tar -xzf flyway-commandline-4.2.0.tar.gz -C $FLYWAY_HOME  --strip-components=1
+   tar -xzf flyway-commandline-$FLYWAY_VERSION.tar.gz -C $FLYWAY_HOME  --strip-components=1
 
 VOLUME /var/flyway/data
 
