@@ -212,4 +212,23 @@ Successfully applied 4 migrations to schema "public" (execution time 00:00.046s)
 
 The database have been updated accordingly
 
+<pre><code>
+beosbank-europa=# select * from eu_customer;
+ id |    city     |     country      |      street       |  zip   | birthdate  |firstname  | lastname
+----+-------------+------------------+-------------------+--------+------------+------------+-----------
+  1 | Berlin      | Germany          | brand burgStrasse | 10115  | 1985-06-20 | Yanick     | Modjo
+  2 | Bologna     | Italy            | place Venice      | 40100  | 1984-11-21 | Mirabeau   | Luc
+  3 | Paris       | France           | Bld DeGaule       | 75001  | 2000-02-07 | Noe        | Nono
+  4 | Chatillon   | France           | Avenue JFK        | 55     | 1984-02-19 | Landry     | Kouam
+  5 | Douala      | Cameroon         | bld Liberte       | 1020   | 1996-04-21 | Ghislain   | Kamga
+  6 | Yaounde     | Cameroon         | Hypodrome         | 1400   | 1983-11-18 | Nathan     | Brice
+  7 | Bruxelles   | Belgium          | rue Van Gogh      | 1000   | 1980-09-06 | Yohan      | Pieter
+  9 | Bamako      | Mali             | Rue Modibo Keita  | 30     | 1979-05-17 | Mohamed    | Diallo
+ 10 | Cracovie    | Pologne          | Avenue Vienne     | 434    | 1983-05-17 |Souleymann | Njifenjou
+ <b>11 | Chennai     | Red Hat Training | Gandhi street     | 600001 | 1990-02-13 | Anusha     | Mandalapu</b>
+<b> 12 | Sao Polo    | Open Source      | samba bld         | 75020  | 1994-02-13 | Adriana    | Pinto</b>
+ <b> 8 | Farnborough | UK               | 200 Fowler Avenue | 208    | 1990-01-01 |John       | Doe</b>
+(12 rows)
+```
 
+-------
