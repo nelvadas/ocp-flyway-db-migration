@@ -1,4 +1,4 @@
-# Flyway Database Migraiton in Openshift Demo
+# Flyway Database Migration in Openshift Demo
 
 ## Introduction
 
